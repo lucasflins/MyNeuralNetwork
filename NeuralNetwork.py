@@ -1,11 +1,15 @@
 import numpy as np
 import random
+import math
+
+def sigmoid(x):
+    return 1/(1+(math.e**-x))
 
 class NeuralNetwork():
     def __init__(self):
         self.h_nodes = []
         self.actual_m = 0
-        self.relu = np.vectorize(max)
+        self.sig = np.vectorize(sigmoid)
 
     def add_inp_nodes(self, inp, bias):
         self.inp_nodes = [inp, bias] #np.array([[random.random() for x in range(len(inp))] for i in range(next_size)])
@@ -27,10 +31,10 @@ class NeuralNetwork():
 
     def feed_foward(self):
         last_size = len(self.h_nodes)-1
-        self.h_nodes[0][0] = self.relu(self.inp_nodes[2].dot(self.inp_nodes[0]) + self.inp_nodes[1], 0.0)
+        self.h_nodes[0][0] = self.sig(self.inp_nodes[2].dot(self.inp_nodes[0]) + self.inp_nodes[1])
         for i in range(1, len(self.h_nodes)):
-            self.h_nodes[i][0] = self.relu(self.h_nodes[i-1][3].dot(self.h_nodes[i-1][0]) + self.h_nodes[i][2], 0.0)
-        self.o_nodes[0] = self.relu(self.h_nodes[last_size][3].dot(self.h_nodes[last_size][0]) + self.h_nodes[last_size][2], 0.0)
+            self.h_nodes[i][0] = self.sig(self.h_nodes[i-1][3].dot(self.h_nodes[i-1][0]) + self.h_nodes[i][2])
+        self.o_nodes[0] = self.sig(self.h_nodes[last_size][3].dot(self.h_nodes[last_size][0]) + self.h_nodes[last_size][2])
         
 if __name__ == '__main__':
     nn = NeuralNetwork()
